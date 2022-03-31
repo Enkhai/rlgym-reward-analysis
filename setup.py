@@ -15,7 +15,7 @@ setuptools.setup(
         "Bug Tracker": "https://github.com/Enkhai/rlgym-analysis/issues",
     },
     license="MIT",
-    packages=['rlgym-analysis'],
+    packages=['rlgym_analysis'],
     install_requires=[
         'scipy',
         'pandas',
