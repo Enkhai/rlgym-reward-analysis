@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 import numpy as np
 from rlgym.utils import common_values
 
-import .common_rewards
+from . import common_rewards
 
 _goal_depth = common_values.BACK_NET_Y - common_values.BACK_WALL_Y + common_values.BALL_RADIUS
 
