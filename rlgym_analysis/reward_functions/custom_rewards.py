@@ -3,7 +3,7 @@ from typing import List, Tuple, Union
 import numpy as np
 from rlgym.utils import common_values
 
-from reward_functions import common
+import common_rewards
 
 _goal_depth = common_values.BACK_NET_Y - common_values.BACK_WALL_Y + common_values.BALL_RADIUS
 
@@ -22,9 +22,9 @@ def offensive_potential(player_position,
     Uses a combination of `AlignBallGoal`,`VelocityPlayerToBallReward` and `LiuDistancePlayerToBallReward` rewards.
     """
 
-    velocity_player2ball_rew = common.velocity_player2ball(player_position, player_lin_velocity, ball_position)
-    align_ball_rew = common.align_ball(player_position, ball_position,
-                                       defense, offense, orange)
+    velocity_player2ball_rew = common_rewards.velocity_player2ball(player_position, player_lin_velocity, ball_position)
+    align_ball_rew = common_rewards.align_ball(player_position, ball_position,
+                                               defense, offense, orange)
     liu_dist_player2ball_rew = liu_dist_player2ball(player_position, ball_position, dispersion, density)
 
     # logical AND
@@ -44,8 +44,8 @@ def dist_weighted_align_ball(player_position,
                              dispersion=1,
                              density=1,
                              orange=False):
-    align_ball_rew = common.align_ball(player_position, ball_position,
-                                       defense, offense, orange)
+    align_ball_rew = common_rewards.align_ball(player_position, ball_position,
+                                               defense, offense, orange)
     liu_dist_player2ball_rew = liu_dist_player2ball(player_position, ball_position, dispersion, density)
 
     rew = align_ball_rew * liu_dist_player2ball_rew
@@ -130,4 +130,4 @@ def event(args: Union[Tuple[List[int]], Tuple[List[int], List[float]]],
     :param add_events: Event names to append to the default or a provided list of rewards.
         Events are appended to the end of the list.
     """
-    return common.event(args, event_names, remove_events, add_events)
+    return common_rewards.event(args, event_names, remove_events, add_events)
