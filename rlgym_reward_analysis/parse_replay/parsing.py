@@ -1,4 +1,4 @@
-from typing import Sequence, Union, List, Dict, Callable
+from typing import Sequence, Union, Dict, Callable
 
 import numpy as np
 import pandas as pd
@@ -7,7 +7,7 @@ from .reward_functions import rewards_names_map
 
 
 def parse_replay(df: pd.DataFrame,
-                 reward_names_args: Union[None, Sequence[Union[str, List[str, dict]]]] = None,
+                 reward_names_args: Union[None, Sequence[Union[str, Tuple[str, dict]]]] = None,
                  reward_names_fns: Union[None, Dict[str, Callable[[pd.DataFrame, np.ndarray], np.ndarray]]] = None):
     assert reward_names_args or reward_names_fns, "Either `reward_names_args` or `reward_names_fns` must be provided"
 
@@ -40,5 +40,5 @@ def parse_replay(df: pd.DataFrame,
 
 
 def parse_replays(paths,
-                  reward_names_args: Union[None, Sequence[Union[str, List[str, dict]]]] = None):
+                  reward_names_args: Union[None, Sequence[Union[str, Tuple[str, dict]]]] = None):
     pass
