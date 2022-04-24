@@ -29,9 +29,9 @@ def parse_replay(df: pd.DataFrame,
                                                                   player_team,
                                                                   **r_args))
 
-    player_reward_values = {p_t[0]: {r_n: reward_names_fns[r_n](df, p_t)
-                                     for r_n in reward_names_fns}
-                            for p_t in players_teams}
+    player_reward_values = {(p_t[0], r_n): reward_names_fns[r_n](df, p_t)
+                            for p_t in players_teams
+                            for r_n in reward_names_fns}
 
     reward_values_df = pd.DataFrame(player_reward_values)
     assert reward_values_df.shape[0] == df.shape[0]  # assert for same number of rows
