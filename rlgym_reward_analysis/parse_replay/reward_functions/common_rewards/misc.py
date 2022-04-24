@@ -11,7 +11,7 @@ def velocity(frames, player_team, negative=False):
 
 
 def save_boost(frames, player_team):
-    return np.sqrt(frames[int(player_team[0])]['boost'] / 255)
+    return np.sqrt(frames[player_team[0]]['boost'] / 255)
 
 
 def align_ball(frames, player_team, defense=1, offense=1):
@@ -19,7 +19,6 @@ def align_ball(frames, player_team, defense=1, offense=1):
         blue_goal, orange_goal = _objectives
     else:
         blue_goal, orange_goal = _objectives[::-1]
-    blue_goal, orange_goal = _objectives[::int((int(player_team[1]) - 0.5) * 2)]
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']].values
     player_position = frames[player_team[0]][['pos_x', 'pos_y', 'pos_z']].values
 
