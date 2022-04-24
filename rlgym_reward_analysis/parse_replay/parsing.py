@@ -1,4 +1,5 @@
 from typing import Sequence, Union, Dict, Callable, Tuple
+from functools import partial
 
 import numpy as np
 import pandas as pd
@@ -24,10 +25,7 @@ def parse_replay(df: pd.DataFrame,
                 r_name, r_args = r, {}
             else:
                 r_name, r_args = r
-            reward_names_fns[r_name] = (lambda frames, player_team:
-                                        rewards_names_map[r_name](frames,
-                                                                  player_team,
-                                                                  **r_args))
+            reward_names_fns[r_name] = partial(rewards_names_map[r_name], **r_args)
 
     player_reward_values = {(p_t[0], r_n): reward_names_fns[r_n](df, p_t)
                             for p_t in players_teams
