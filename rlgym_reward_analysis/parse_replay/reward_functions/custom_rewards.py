@@ -75,7 +75,7 @@ def offensive_potential(frames,
     # logical AND
     # when both alignment and player to ball velocity are negative we must get a negative output
     # no need to compute for liu_dist_player2ball_rew, positive only
-    sign = (((velocity_player2ball_rew >= 0) & align_ball_rew >= 0) - 0.5) * 2
+    sign = (((velocity_player2ball_rew >= 0) & (align_ball_rew >= 0)) - 0.5) * 2
     rew = align_ball_rew * velocity_player2ball_rew * liu_dist_player2ball_rew
     # "weighted" product (n_1 * n_2 * ... * n_N) ^ (1 / N)
     return (np.abs(rew) ** (1 / 3)) * sign
