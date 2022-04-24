@@ -5,7 +5,7 @@ from rlgym_reward_analysis.parse_replay import _objectives
 
 
 def velocity_ball2goal(frames, player_team):
-    objective = _objectives[player_team[1]]
+    objective = _objectives[int(player_team[1])]
 
     pos_diff = objective - frames['ball'][['pos_x', 'pos_y', 'pos_z']]
     norm_pos_diff = pos_diff / (np.linalg.norm(pos_diff, axis=-1)[..., None] + 1e-8)

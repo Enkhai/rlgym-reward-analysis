@@ -9,7 +9,7 @@ _goal_depth = 10 * (common_values.BACK_NET_Y - common_values.BACK_WALL_Y + commo
 
 def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
-    objective = _objectives[player_team[1]]
+    objective = _objectives[int(player_team[1])]
 
     dist = np.linalg.norm(ball_position - objective, axis=-1) - _goal_depth  # adjusted by goal depth radius
     rew = np.exp(-0.5 * dist / (common_values.BALL_MAX_SPEED * 10 * dispersion))  # with dispersion
@@ -20,7 +20,7 @@ def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
 
 def signed_liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
-    objective = _objectives[player_team[1]]
+    objective = _objectives[int(player_team[1])]
 
     dist = np.linalg.norm(ball_position - objective, axis=-1) - _goal_depth  # adjusted by goal depth radius
     # 4570: trigonometry solution - produces an approximate unsigned value of 0.5 at position [4096, 0, 93]
@@ -33,6 +33,8 @@ def signed_liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
 
 def ball_y_coord(frames, player_team, exponent=1):
     ball_y_position = frames['ball']['pos_y'].values
+    if int(player_team[1]):
+        ball_y_position *= -1
     rew = ball_y_position / (10 * (common_values.BACK_WALL_Y + common_values.BALL_RADIUS))
     rew = (np.abs(rew) ** exponent) * np.sign(rew)
     return rew
