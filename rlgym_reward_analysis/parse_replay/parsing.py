@@ -53,8 +53,7 @@ def parse_replays(folder_paths: Dict[str, Sequence[str]],
     def load_parse(replay_file):
         df = pd.read_csv(replay_file,
                          header=[0, 1],
-                         index_col=0,
-                         skiprows=lambda x: x % n_skip != 0)
+                         index_col=0).iloc[::n_skip]
         return parse_replay(df, reward_names_fns=reward_names_fns)
 
     reward_values_dfs = {category: [load_parse(folder + "/" + f_name)
