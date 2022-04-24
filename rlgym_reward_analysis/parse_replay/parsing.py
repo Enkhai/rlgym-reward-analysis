@@ -4,6 +4,8 @@ from functools import partial
 import numpy as np
 import pandas as pd
 
+import os
+
 from .reward_functions import rewards_names_map
 
 
@@ -37,6 +39,27 @@ def parse_replay(df: pd.DataFrame,
     return reward_values_df
 
 
-def parse_replays(paths,
-                  reward_names_args: Union[None, Sequence[Union[str, Tuple[str, dict]]]] = None):
-    pass
+def parse_replays(folder_paths: Dict[str, Sequence[str]],
+                  reward_names_args: Union[None, Sequence[Union[str, Tuple[str, dict]]]],
+                  n_skip=9):
+    reward_names_fns = {}
+    for r in reward_names_args:
+        if type(r) is str:
+            r_name, r_args = r, {}
+        else:
+            r_name, r_args = r
+        reward_names_fns[r_name] = partial(rewards_names_map[r_name], **r_args)
+
+    def load_parse(replay_file):
+        df = pd.read_csv(replay_file,
+                         header=[0, 1],
+                         index_col=0,
+                         skiprows=lambda x: x % n_skip != 0)
+        return parse_replay(df, reward_names_fns=reward_names_fns)
+
+    reward_values_dfs = {category: [load_parse(folder + "/" + f_name)
+                                    for folder in folders
+                                    for f_name in os.listdir(folder)]
+                         for category, folders in folder_paths.items()}
+
+    return reward_values_dfs
