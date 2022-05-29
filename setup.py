@@ -19,7 +19,6 @@ setuptools.setup(
     install_requires=[
         'scipy',
         'pandas',
-        'seaborn',
-        'rlgym>=1.1.0'
+        'seaborn'
     ]
 )

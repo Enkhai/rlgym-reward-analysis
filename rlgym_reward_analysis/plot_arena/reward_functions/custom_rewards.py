@@ -1,11 +1,11 @@
 from typing import List, Tuple, Union
 
 import numpy as np
-from rlgym.utils import common_values
 
+from rlgym_reward_analysis import _common_values
 from . import common_rewards
 
-_goal_depth = common_values.BACK_NET_Y - common_values.BACK_WALL_Y + common_values.BALL_RADIUS
+_goal_depth = _common_values.BACK_NET_Y - _common_values.BACK_WALL_Y + _common_values.BALL_RADIUS
 
 
 def offensive_potential(player_position,
@@ -59,8 +59,8 @@ def signed_liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1
     A natural extension of a signed "Ball close to target" reward, inspired by https://arxiv.org/abs/2105.12196.\n
     Produces an approximate reward of 0 at ball position [side_wall, 0, ball_radius].
     """
-    objective = np.array(common_values.ORANGE_GOAL_BACK) if not own_goal \
-        else np.array(common_values.BLUE_GOAL_BACK)
+    objective = np.array(_common_values.ORANGE_GOAL_BACK) if not own_goal \
+        else np.array(_common_values.BLUE_GOAL_BACK)
 
     # Distance is computed with respect to the goal back adjusted by the goal depth
     dist = np.linalg.norm(ball_position - objective, 2, axis=-1) - _goal_depth
@@ -80,14 +80,14 @@ def liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1, own_g
     """
     A natural extension of a "Ball close to target" reward, inspired by https://arxiv.org/abs/2105.12196.
     """
-    objective = np.array(common_values.ORANGE_GOAL_BACK) if not own_goal \
-        else np.array(common_values.BLUE_GOAL_BACK)
+    objective = np.array(_common_values.ORANGE_GOAL_BACK) if not own_goal \
+        else np.array(_common_values.BLUE_GOAL_BACK)
 
     # Distance is computed with respect to the goal back adjusted by the goal depth
     dist = np.linalg.norm(ball_position - objective, 2, axis=-1) - _goal_depth
 
     # with dispersion
-    rew = np.exp(-0.5 * dist / (common_values.BALL_MAX_SPEED * dispersion))
+    rew = np.exp(-0.5 * dist / (_common_values.BALL_MAX_SPEED * dispersion))
     # with density
     rew = rew ** (1 / density)
 
@@ -98,8 +98,8 @@ def liu_dist_player2ball(player_position, ball_position, dispersion=1, density=1
     """
     A natural extension of a "Player close to ball" reward, inspired by https://arxiv.org/abs/2105.12196
     """
-    dist = np.linalg.norm(player_position - ball_position, 2, axis=-1) - common_values.BALL_RADIUS
-    return np.exp(-0.5 * dist / (common_values.CAR_MAX_SPEED * dispersion)) ** (1 / density)
+    dist = np.linalg.norm(player_position - ball_position, 2, axis=-1) - _common_values.BALL_RADIUS
+    return np.exp(-0.5 * dist / (_common_values.CAR_MAX_SPEED * dispersion)) ** (1 / density)
 
 
 def diff_potential(reward, gamma, negative_slope=1):
@@ -112,7 +112,7 @@ def diff_potential(reward, gamma, negative_slope=1):
 
 
 def ball_y_coord(ball_position, exponent=1):
-    rew = ball_position[:, 1] / (common_values.BACK_WALL_Y + common_values.BALL_RADIUS)
+    rew = ball_position[:, 1] / (_common_values.BACK_WALL_Y + _common_values.BALL_RADIUS)
     rew = (np.abs(rew) ** exponent) * np.sign(rew)
     return rew
 

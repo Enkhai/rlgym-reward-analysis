@@ -1,13 +1,13 @@
 import numpy as np
-from rlgym.utils import common_values
-
 from scipy.spatial.transform import Rotation
+
+from rlgym_reward_analysis import _common_values
 
 
 def velocity_player2ball(frames, player_team):
     pos_diff = frames['ball'][['pos_x', 'pos_y', 'pos_z']] - frames[player_team[0]][['pos_x', 'pos_y', 'pos_z']]
     norm_pos_diff = pos_diff / (np.linalg.norm(pos_diff, axis=-1)[..., None] + 1e-8)
-    player_lin_velocity = frames[player_team[0]][['vel_x', 'vel_y', 'vel_z']] / (common_values.CAR_MAX_SPEED * 10)
+    player_lin_velocity = frames[player_team[0]][['vel_x', 'vel_y', 'vel_z']] / (_common_values.CAR_MAX_SPEED * 10)
     return (norm_pos_diff.values * player_lin_velocity.values).sum(1)
 
 

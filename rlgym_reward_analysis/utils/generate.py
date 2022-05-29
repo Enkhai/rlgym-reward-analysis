@@ -1,5 +1,6 @@
 import numpy as np
-from rlgym.utils import common_values
+
+from rlgym_reward_analysis import _common_values
 
 
 def grid_positions(point_distance=1600, quarter_split=None):
@@ -13,19 +14,19 @@ def grid_positions(point_distance=1600, quarter_split=None):
     """
     if quarter_split:
         splits = (2 * quarter_split + 1,) * 2 + (quarter_split + 1,)
-        end_points = ((common_values.SIDE_WALL_X, -common_values.SIDE_WALL_X),
-                      (common_values.BACK_WALL_Y, -common_values.BACK_WALL_Y),
-                      (common_values.CEILING_Z, 0))
+        end_points = ((_common_values.SIDE_WALL_X, -_common_values.SIDE_WALL_X),
+                      (_common_values.BACK_WALL_Y, -_common_values.BACK_WALL_Y),
+                      (_common_values.CEILING_Z, 0))
     else:
-        splits = (2 * common_values.SIDE_WALL_X // point_distance + 1,
-                  2 * common_values.BACK_WALL_Y // point_distance + 1,
-                  common_values.CEILING_Z // point_distance + 1)
-        x_mod = common_values.SIDE_WALL_X % point_distance
-        y_mod = common_values.BACK_WALL_Y % point_distance
-        z_mod = (common_values.CEILING_Z % point_distance) // 2
-        end_points = ((common_values.SIDE_WALL_X - x_mod, -common_values.SIDE_WALL_X + x_mod),
-                      (common_values.BACK_WALL_Y - y_mod, -common_values.BACK_WALL_Y + y_mod),
-                      (common_values.CEILING_Z - z_mod, 0 + z_mod))
+        splits = (2 * _common_values.SIDE_WALL_X // point_distance + 1,
+                  2 * _common_values.BACK_WALL_Y // point_distance + 1,
+                  _common_values.CEILING_Z // point_distance + 1)
+        x_mod = _common_values.SIDE_WALL_X % point_distance
+        y_mod = _common_values.BACK_WALL_Y % point_distance
+        z_mod = (_common_values.CEILING_Z % point_distance) // 2
+        end_points = ((_common_values.SIDE_WALL_X - x_mod, -_common_values.SIDE_WALL_X + x_mod),
+                      (_common_values.BACK_WALL_Y - y_mod, -_common_values.BACK_WALL_Y + y_mod),
+                      (_common_values.CEILING_Z - z_mod, 0 + z_mod))
 
     xs = np.linspace(end_points[0][0], end_points[0][1], splits[0])
     ys = np.linspace(end_points[1][0], end_points[1][1], splits[1])
@@ -34,7 +35,7 @@ def grid_positions(point_distance=1600, quarter_split=None):
     positions = np.stack(np.meshgrid(xs, ys, zs), axis=-1).reshape(-1, 3)
     abs_positions = np.abs(positions)
     not_beyond_corner = (abs_positions[:, 0] + abs_positions[:, 1] <
-                         common_values.SIDE_WALL_X + common_values.BACK_WALL_Y - 1152)
+                         _common_values.SIDE_WALL_X + _common_values.BACK_WALL_Y - 1152)
     return positions[not_beyond_corner]
 
 

@@ -1,10 +1,9 @@
-from typing import Sequence, Union, Dict, Callable, Tuple
+import os
 from functools import partial
+from typing import Sequence, Union, Dict, Callable, Tuple
 
 import numpy as np
 import pandas as pd
-
-import os
 
 from .reward_functions import rewards_names_map
 

@@ -1,10 +1,9 @@
 import numpy as np
-from rlgym.utils import common_values
 
 from . import common_rewards
-from .. import _objectives
+from .. import _objectives, _common_values
 
-_goal_depth = common_values.BACK_NET_Y - common_values.BACK_WALL_Y + common_values.BALL_RADIUS
+_goal_depth = _common_values.BACK_NET_Y - _common_values.BACK_WALL_Y + _common_values.BALL_RADIUS
 
 
 def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
@@ -12,7 +11,7 @@ def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
     objective = _objectives[int(player_team[1])]
 
     dist = np.linalg.norm(ball_position - objective, axis=-1) - _goal_depth  # adjusted by goal depth radius
-    rew = np.exp(-0.5 * dist / (common_values.BALL_MAX_SPEED * dispersion))  # with dispersion
+    rew = np.exp(-0.5 * dist / (_common_values.BALL_MAX_SPEED * dispersion))  # with dispersion
     rew **= (1 / density)  # with density
 
     return rew
@@ -35,7 +34,7 @@ def ball_y_coord(frames, player_team, exponent=1):
     ball_y_position = frames['ball']['pos_y'].values
     if int(player_team[1]):
         ball_y_position *= -1
-    rew = ball_y_position / (common_values.BACK_WALL_Y + common_values.BALL_RADIUS)
+    rew = ball_y_position / (_common_values.BACK_WALL_Y + _common_values.BALL_RADIUS)
     rew = (np.abs(rew) ** exponent) * np.sign(rew)
     return rew
 
@@ -44,8 +43,8 @@ def liu_dist_player2ball(frames, player_team, dispersion=1, density=1):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
     player_position = frames[player_team[0]][['pos_x', 'pos_y', 'pos_z']]
 
-    dist = np.linalg.norm(player_position - ball_position, axis=-1) - common_values.BALL_RADIUS
-    return np.exp(-0.5 * dist / (common_values.CAR_MAX_SPEED * dispersion)) ** (1 / density)
+    dist = np.linalg.norm(player_position - ball_position, axis=-1) - _common_values.BALL_RADIUS
+    return np.exp(-0.5 * dist / (_common_values.CAR_MAX_SPEED * dispersion)) ** (1 / density)
 
 
 def dist_weighted_align_ball(frames,

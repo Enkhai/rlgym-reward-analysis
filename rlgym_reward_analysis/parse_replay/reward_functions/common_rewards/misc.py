@@ -1,13 +1,13 @@
 import numpy as np
-from rlgym.utils import common_values
 
+from rlgym_reward_analysis import _common_values
 from rlgym_reward_analysis.parse_replay import _objectives
 from rlgym_reward_analysis.utils.math import cosine_similarity
 
 
 def velocity(frames, player_team, negative=False):
     return (np.linalg.norm(frames[player_team[0]][['vel_x', 'vel_y', 'vel_z']], axis=-1) /
-            (common_values.CAR_MAX_SPEED * 10) * (1 - 2 * negative))
+            (_common_values.CAR_MAX_SPEED * 10) * (1 - 2 * negative))
 
 
 def save_boost(frames, player_team):

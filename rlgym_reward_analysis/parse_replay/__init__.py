@@ -1,4 +1,5 @@
 import numpy as np
-from rlgym.utils import common_values
 
-_objectives = np.array([common_values.ORANGE_GOAL_BACK, common_values.BLUE_GOAL_BACK])
+from rlgym_reward_analysis import _common_values
+
+_objectives = np.array([_common_values.ORANGE_GOAL_BACK, _common_values.BLUE_GOAL_BACK])

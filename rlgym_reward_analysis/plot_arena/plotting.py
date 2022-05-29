@@ -3,20 +3,21 @@ from typing import Union, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import tri
-from rlgym.utils import common_values
 from scipy.spatial.kdtree import KDTree
+
+from rlgym_reward_analysis import _common_values
 
 
 def make_arena_(refiner_sub_div=6):
     corner_offset = 1152
-    right_corner0 = np.array([[- common_values.SIDE_WALL_X + corner_offset, - common_values.BACK_WALL_Y],
-                              [- common_values.SIDE_WALL_X, - common_values.BACK_WALL_Y + corner_offset]])
-    left_corner0 = np.array([[common_values.SIDE_WALL_X - corner_offset, - common_values.BACK_WALL_Y],
-                             [common_values.SIDE_WALL_X, - common_values.BACK_WALL_Y + corner_offset]])
-    right_corner1 = np.array([[- common_values.SIDE_WALL_X + corner_offset, common_values.BACK_WALL_Y],
-                              [- common_values.SIDE_WALL_X, common_values.BACK_WALL_Y - corner_offset]])
-    left_corner1 = np.array([[common_values.SIDE_WALL_X - corner_offset, common_values.BACK_WALL_Y],
-                             [common_values.SIDE_WALL_X, common_values.BACK_WALL_Y - corner_offset]])
+    right_corner0 = np.array([[- _common_values.SIDE_WALL_X + corner_offset, - _common_values.BACK_WALL_Y],
+                              [- _common_values.SIDE_WALL_X, - _common_values.BACK_WALL_Y + corner_offset]])
+    left_corner0 = np.array([[_common_values.SIDE_WALL_X - corner_offset, - _common_values.BACK_WALL_Y],
+                             [_common_values.SIDE_WALL_X, - _common_values.BACK_WALL_Y + corner_offset]])
+    right_corner1 = np.array([[- _common_values.SIDE_WALL_X + corner_offset, _common_values.BACK_WALL_Y],
+                              [- _common_values.SIDE_WALL_X, _common_values.BACK_WALL_Y - corner_offset]])
+    left_corner1 = np.array([[_common_values.SIDE_WALL_X - corner_offset, _common_values.BACK_WALL_Y],
+                             [_common_values.SIDE_WALL_X, _common_values.BACK_WALL_Y - corner_offset]])
 
     x = np.array([right_corner0[:, 0], left_corner0[:, 0], right_corner1[:, 0], left_corner1[:, 0]]).flatten()
     y = np.array([right_corner0[:, 1], left_corner0[:, 1], right_corner1[:, 1], left_corner1[:, 1]]).flatten()
@@ -29,10 +30,10 @@ def make_arena_(refiner_sub_div=6):
 def make_goal_(orange=False):
     goal_radius = 893
 
-    goal = np.array([[- goal_radius, - common_values.BACK_WALL_Y],
-                     [- goal_radius, - common_values.BACK_NET_Y],
-                     [goal_radius, - common_values.BACK_WALL_Y],
-                     [goal_radius, - common_values.BACK_NET_Y]])
+    goal = np.array([[- goal_radius, - _common_values.BACK_WALL_Y],
+                     [- goal_radius, - _common_values.BACK_NET_Y],
+                     [goal_radius, - _common_values.BACK_WALL_Y],
+                     [goal_radius, - _common_values.BACK_NET_Y]])
     if orange:
         goal[:, 1] *= -1
 
@@ -44,7 +45,7 @@ def make_goal_(orange=False):
 
 _arena = make_arena_()
 _blue_goal, _orange_goal = make_goal_(), make_goal_(True)
-_boost_locations = np.array(common_values.BOOST_LOCATIONS)
+_boost_locations = np.array(_common_values.BOOST_LOCATIONS)
 
 arena_positions = np.stack([_arena.x, _arena.y], -1)
 # We use a height dimension of 300 for the plots
