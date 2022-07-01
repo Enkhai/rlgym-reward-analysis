@@ -108,7 +108,7 @@ def liu_dist_ball2goal_diff(ball_position: np.ndarray,
     Dispersion, density and weighting apply.
     """
     return (off_weight * liu_dist_ball2goal(ball_position, off_dispersion, off_density) -
-            def_weight * liu_dist_ball2goal(ball_position, def_dispersion, def_density))
+            def_weight * liu_dist_ball2goal(ball_position, def_dispersion, def_density, True))
 
 
 def liu_dist_player2ball(player_position, ball_position, dispersion=1, density=1):

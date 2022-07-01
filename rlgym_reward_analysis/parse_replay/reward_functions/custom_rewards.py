@@ -6,9 +6,12 @@ from .. import _objectives, _common_values
 _goal_depth = _common_values.BACK_NET_Y - _common_values.BACK_WALL_Y + _common_values.BALL_RADIUS
 
 
-def liu_dist_ball2goal(frames, player_team, dispersion=1., density=1.):
+def liu_dist_ball2goal(frames, player_team, dispersion=1., density=1., own_goal=False):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
-    objective = _objectives[int(player_team[1])]
+    if own_goal:
+        objective = _objectives[::-1][int(player_team[1])]
+    else:
+        objective = _objectives[int(player_team[1])]
 
     dist = np.linalg.norm(ball_position - objective, axis=-1) - _goal_depth  # adjusted by goal depth radius
     rew = np.exp(-0.5 * dist / (_common_values.BALL_MAX_SPEED * dispersion))  # with dispersion
@@ -39,7 +42,7 @@ def liu_dist_ball2goal_diff(frames,
                             off_weight=1.,
                             def_weight=1.):
     return (off_weight * liu_dist_ball2goal(frames, player_team, off_dispersion, off_density) -
-            def_weight * liu_dist_ball2goal(frames, player_team, def_dispersion, def_density))
+            def_weight * liu_dist_ball2goal(frames, player_team, def_dispersion, def_density, True))
 
 
 def ball_y_coord(frames, player_team, exponent=1.):
