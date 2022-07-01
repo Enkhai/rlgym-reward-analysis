@@ -2,6 +2,7 @@ from . import common_rewards, custom_rewards, extra_rewards
 
 rewards_names_map = {"liu_dist_ball2goal": custom_rewards.liu_dist_ball2goal,
                      "signed_liu_dist_ball2goal": custom_rewards.signed_liu_dist_ball2goal,
+                     "liu_dist_ball2goal_diff": custom_rewards.liu_dist_ball2goal_diff,
                      "velocity_ball2goal": common_rewards.velocity_ball2goal,
                      "ball_y_coord": custom_rewards.ball_y_coord,
                      "velocity": common_rewards.velocity,

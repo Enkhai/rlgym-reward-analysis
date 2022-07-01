@@ -54,7 +54,7 @@ def dist_weighted_align_ball(player_position,
     return np.sqrt(np.abs(rew)) * np.sign(rew)
 
 
-def signed_liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1, own_goal=False):
+def signed_liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1., density=1., own_goal=False):
     """
     A natural extension of a signed "Ball close to target" reward, inspired by https://arxiv.org/abs/2105.12196.\n
     Produces an approximate reward of 0 at ball position [side_wall, 0, ball_radius].
@@ -76,7 +76,7 @@ def signed_liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1
     return rew
 
 
-def liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1, own_goal=False):
+def liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1., density=1., own_goal=False):
     """
     A natural extension of a "Ball close to target" reward, inspired by https://arxiv.org/abs/2105.12196.
     """
@@ -94,6 +94,23 @@ def liu_dist_ball2goal(ball_position: np.ndarray, dispersion=1, density=1, own_g
     return rew
 
 
+def liu_dist_ball2goal_diff(ball_position: np.ndarray,
+                            off_dispersion=0.5,
+                            def_dispersion=0.5,
+                            def_density=1.,
+                            off_density=1.,
+                            off_weight=1.,
+                            def_weight=1.):
+    """
+    Ball to goal distance difference reward. Measures the difference of the "Ball to goal distance" between the
+    opponent and the team goal.
+
+    Dispersion, density and weighting apply.
+    """
+    return (off_weight * liu_dist_ball2goal(ball_position, off_dispersion, off_density) -
+            def_weight * liu_dist_ball2goal(ball_position, def_dispersion, def_density))
+
+
 def liu_dist_player2ball(player_position, ball_position, dispersion=1, density=1):
     """
     A natural extension of a "Player close to ball" reward, inspired by https://arxiv.org/abs/2105.12196
@@ -102,7 +119,7 @@ def liu_dist_player2ball(player_position, ball_position, dispersion=1, density=1
     return np.exp(-0.5 * dist / (_common_values.CAR_MAX_SPEED * dispersion)) ** (1 / density)
 
 
-def diff_potential(reward, gamma, negative_slope=1):
+def diff_potential(reward, gamma, negative_slope=1.):
     """
     Potential-based reward shaping function with a `negative_slope` magnitude parameter
     """
@@ -111,7 +128,7 @@ def diff_potential(reward, gamma, negative_slope=1):
     return rew
 
 
-def ball_y_coord(ball_position, exponent=1):
+def ball_y_coord(ball_position, exponent=1.):
     rew = ball_position[:, 1] / (_common_values.BACK_WALL_Y + _common_values.BALL_RADIUS)
     rew = (np.abs(rew) ** exponent) * np.sign(rew)
     return rew

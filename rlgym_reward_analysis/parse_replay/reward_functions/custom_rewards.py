@@ -6,7 +6,7 @@ from .. import _objectives, _common_values
 _goal_depth = _common_values.BACK_NET_Y - _common_values.BACK_WALL_Y + _common_values.BALL_RADIUS
 
 
-def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
+def liu_dist_ball2goal(frames, player_team, dispersion=1., density=1.):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
     objective = _objectives[int(player_team[1])]
 
@@ -17,7 +17,7 @@ def liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
     return rew
 
 
-def signed_liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
+def signed_liu_dist_ball2goal(frames, player_team, dispersion=1., density=1.):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
     objective = _objectives[int(player_team[1])]
 
@@ -30,7 +30,19 @@ def signed_liu_dist_ball2goal(frames, player_team, dispersion=1, density=1):
     return rew
 
 
-def ball_y_coord(frames, player_team, exponent=1):
+def liu_dist_ball2goal_diff(frames,
+                            player_team,
+                            off_dispersion=0.5,
+                            def_dispersion=0.5,
+                            def_density=1.,
+                            off_density=1.,
+                            off_weight=1.,
+                            def_weight=1.):
+    return (off_weight * liu_dist_ball2goal(frames, player_team, off_dispersion, off_density) -
+            def_weight * liu_dist_ball2goal(frames, player_team, def_dispersion, def_density))
+
+
+def ball_y_coord(frames, player_team, exponent=1.):
     ball_y_position = frames['ball']['pos_y'].values
     if int(player_team[1]):
         ball_y_position *= -1
@@ -39,7 +51,7 @@ def ball_y_coord(frames, player_team, exponent=1):
     return rew
 
 
-def liu_dist_player2ball(frames, player_team, dispersion=1, density=1):
+def liu_dist_player2ball(frames, player_team, dispersion=1., density=1.):
     ball_position = frames['ball'][['pos_x', 'pos_y', 'pos_z']]
     player_position = frames[player_team[0]][['pos_x', 'pos_y', 'pos_z']]
 
@@ -51,8 +63,8 @@ def dist_weighted_align_ball(frames,
                              player_team,
                              defense=0.5,
                              offense=0.5,
-                             dispersion=1,
-                             density=1):
+                             dispersion=1.,
+                             density=1.):
     align_ball_rew = common_rewards.align_ball(frames, player_team, defense, offense)
     liu_dist_player2ball_rew = liu_dist_player2ball(frames, player_team, dispersion, density)
 
@@ -65,8 +77,8 @@ def offensive_potential(frames,
                         player_team,
                         defense=0.5,
                         offense=0.5,
-                        dispersion=1,
-                        density=1):
+                        dispersion=1.,
+                        density=1.):
     velocity_player2ball_rew = common_rewards.velocity_player2ball(frames, player_team)
     align_ball_rew = common_rewards.align_ball(frames, player_team, defense, offense)
     liu_dist_player2ball_rew = liu_dist_player2ball(frames, player_team, dispersion, density)

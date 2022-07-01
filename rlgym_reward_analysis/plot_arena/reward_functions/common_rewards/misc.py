@@ -72,7 +72,7 @@ def constant(w):
     return w
 
 
-def align_ball(player_position, ball_position, defense=1, offense=1, orange=False):
+def align_ball(player_position, ball_position, defense=1., offense=1., orange=False):
     if not orange:
         blue_goal = np.array(_common_values.BLUE_GOAL_BACK)
         orange_goal = np.array(_common_values.ORANGE_GOAL_BACK)

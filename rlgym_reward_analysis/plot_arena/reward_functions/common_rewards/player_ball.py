@@ -27,5 +27,5 @@ def face_ball(player_position, ball_position, player_forward_vec):
     return (norm_pos_diff * player_forward_vec).sum(-1)
 
 
-def touch_ball(ball_position, aerial_weight=0):
+def touch_ball(ball_position, aerial_weight=0.):
     return ((ball_position[2] + _common_values.BALL_RADIUS) / (2 * _common_values.BALL_RADIUS)) ** aerial_weight
