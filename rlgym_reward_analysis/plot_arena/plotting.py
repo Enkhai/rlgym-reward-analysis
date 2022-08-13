@@ -59,9 +59,10 @@ def arena_contour(z: np.ndarray,
                   ball_lin_vel: np.ndarray = None,
                   player_positions: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]] = None,
                   player_lin_vels: Union[np.ndarray, Tuple[np.ndarray, np.ndarray]] = None,
-                  goal_w=1,
+                  goal_w: Union[int, float] = 1,
                   player_idx: Union[int, None] = 0,
-                  annotate_ball=False,
+                  annotate_ball: bool = False,
+                  round_annotation: int = 3,
                   figsize: Union[int, Tuple[int, int]] = (12, 15),
                   ball_size=128,
                   player_size=128,
@@ -83,6 +84,7 @@ def arena_contour(z: np.ndarray,
         If the player idx is between n_blue_team and n_blue_team + n_orange_team - 1 an orange player is annotated.
         If the player idx is `None` no player is annotated.
     :param annotate_ball: Whether to annotate the ball with the reward
+    :param round_annotation: The number of floating point digits to round reward annotations to
     :param figsize: The size of the figure. Can be either integer for a square plot or 2-tuple.
     :param ball_size: The ball marker size
     :param player_size: The player marker size
@@ -127,7 +129,7 @@ def arena_contour(z: np.ndarray,
             # get the index of the nearest true point in the arena in order to retrieve the reward for that point
             _, idx = _arena_positions_kdtree.query(ball_position)
             ball_position = arena_positions[idx]
-            plt.annotate(np.round(z[idx], 3), (ball_position[0], ball_position[1]))
+            plt.annotate(np.round(z[idx], round_annotation), (ball_position[0], ball_position[1]))
         if ball_lin_vel is not None:
             # arena x axis is positive on the left-hand side, looking toward the orange goal
             # vectors cannot be inverted and are thus adjusted in the negative x direction
@@ -166,7 +168,7 @@ def arena_contour(z: np.ndarray,
             else:
                 player_annot_rew_idx = orange_idcs[player_idx - len(blue_team)]
                 player_annot_pos = orange_team[player_idx - len(blue_team)]
-            player_annot_rew = z[player_annot_rew_idx].round(3)
+            player_annot_rew = z[player_annot_rew_idx].round(round_annotation)
             plt.annotate(player_annot_rew, (player_annot_pos[0], player_annot_pos[1]))
 
         # TODO: add player forward vectors
